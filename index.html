@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>Inscription Formation | Education Technologie</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #0a0f1c 0%, #0a1628 100%);
+    min-height: 100vh;
+    color: #ffffff;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Animated background particles */
+  .bg-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .particle {
+    position: absolute;
+    background: rgba(200, 16, 46, 0.15);
+    border-radius: 50%;
+    animation: float 15s infinite ease-in-out;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-100px) rotate(180deg); }
+  }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+    animation: slideDown 0.6s ease-out;
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    padding: 12px 24px;
+    border-radius: 60px;
+    border: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 25px;
+  }
+
+  .logo-icon {
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, #c8102e, #e8192e);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 20px;
+  }
+
+  .logo-text h2 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .logo-text p {
+    font-size: 10px;
+    color: #8ca0bc;
+    letter-spacing: 2px;
+  }
+
+  h1 {
+    font-size: clamp(32px, 8vw, 48px);
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff, #c8102e);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 10px;
+  }
+
+  .subhead {
+    color: #8ca0bc;
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+
+  /* Info badges */
+  .info-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 35px;
+    animation: fadeUp 0.6s 0.1s ease-out both;
+  }
+
+  .info-badge {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 40px;
+    padding: 8px 18px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .info-badge i {
+    color: #c8102e;
+    font-size: 14px;
+  }
+
+  /* Form Card */
+  .form-card {
+    background: rgba(15, 32, 64, 0.7);
+    backdrop-filter: blur(20px);
+    border-radius: 32px;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 30px 28px;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+    animation: fadeUp 0.6s 0.2s ease-out both;
+  }
+
+  .form-section {
+    margin-bottom: 28px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding-bottom: 24px;
+  }
+
+  .form-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #c8102e;
+    margin-bottom: 20px;
+  }
+
+  .section-title i {
+    font-size: 20px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .full-row {
+    grid-column: span 2;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #8ca0bc;
+    letter-spacing: 0.5px;
+  }
+
+  .required {
+    color: #c8102e;
+    margin-left: 3px;
+  }
+
+  input, select, textarea {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 12px 16px;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    outline: none;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: #c8102e;
+    box-shadow: 0 0 0 3px rgba(200,16,46,0.2);
+    background: rgba(0,0,0,0.6);
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: rgba(255,255,255,0.25);
+  }
+
+  select option {
+    background: #0a1628;
+  }
+
+  /* Checkbox group */
+  .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .checkbox-item:hover {
+    border-color: rgba(200,16,46,0.4);
+    background: rgba(200,16,46,0.05);
+  }
+
+  .checkbox-item input {
+    width: 18px;
+    height: 18px;
+    accent-color: #c8102e;
+    cursor: pointer;
+  }
+
+  .checkbox-item.active {
+    border-color: #c8102e;
+    background: rgba(200,16,46,0.1);
+  }
+
+  /* Price box */
+  .price-box {
+    background: linear-gradient(135deg, rgba(200,16,46,0.15), rgba(200,16,46,0.05));
+    border: 1px solid rgba(200,16,46,0.3);
+    border-radius: 20px;
+    padding: 18px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 24px;
+  }
+
+  .price-item {
+    text-align: center;
+    flex: 1;
+  }
+
+  .price-label {
+    font-size: 11px;
+    color: #8ca0bc;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .price-amount {
+    font-size: 24px;
+    font-weight: 800;
+    color: white;
+  }
+
+  .price-amount small {
+    font-size: 12px;
+    font-weight: 400;
+    color: #8ca0bc;
+  }
+
+  .offer-badge {
+    background: rgba(200,16,46,0.2);
+    border-radius: 40px;
+    padding: 6px 14px;
+    font-size: 12px;
+    border: 1px solid rgba(200,16,46,0.4);
+  }
+
+  /* Submit Button */
+  .btn-submit {
+    width: 100%;
+    background: linear-gradient(135deg, #c8102e, #e8192e);
+    border: none;
+    border-radius: 60px;
+    padding: 16px;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(200,16,46,0.4);
+  }
+
+  .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(200,16,46,0.5);
+  }
+
+  .btn-submit:active {
+    transform: translateY(1px);
+  }
+
+  /* Success Message */
+  .success-message {
+    display: none;
+    text-align: center;
+    padding: 40px 20px;
+    animation: fadeUp 0.5s ease;
+  }
+
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #c8102e, #e8192e);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 40px;
+  }
+
+  .success-message h3 {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+
+  .success-message p {
+    color: #8ca0bc;
+    margin-bottom: 20px;
+  }
+
+  /* Contact Bar */
+  .contact-bar {
+    text-align: center;
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 24px;
+    backdrop-filter: blur(10px);
+    animation: fadeUp 0.6s 0.3s ease-out both;
+  }
+
+  .contact-bar p {
+    font-size: 12px;
+    color: #8ca0bc;
+    margin-bottom: 12px;
+  }
+
+  .whatsapp-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #25D366;
+    color: white;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 60px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: transform 0.2s;
+  }
+
+  .whatsapp-link:hover {
+    transform: scale(1.02);
+  }
+
+  /* Animations */
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .form-card {
+      padding: 20px;
+    }
+    .row {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .full-row {
+      grid-column: span 1;
+    }
+    .price-box {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  /* Loading state */
+  .btn-submit.loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  .error-border {
+    border-color: #c8102e !important;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-particles" id="particles"></div>
+
+<div class="container">
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">ET</div>
+      <div class="logo-text">
+        <h2>EDUCATION TECHNOLOGIE</h2>
+        <p>FORMATION & INNOVATION</p>
+      </div>
+    </div>
+    <h1>Vacances Utiles</h1>
+    <p class="subhead">Inscription aux formations • Arduino • Électronique • Programmation</p>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-badge"><i class="fas fa-calendar-alt"></i> 22 Juin 2026</div>
+    <div class="info-badge"><i class="fas fa-clock"></i> 2 Mois</div>
+    <div class="info-badge"><i class="fas fa-child"></i> 8 - 15 ans</div>
+    <div class="info-badge"><i class="fas fa-map-marker-alt"></i> Douala Ndogbon</div>
+  </div>
+
+  <div class="form-card" id="formCard">
+    <form id="registrationForm">
+      <!-- Enfant Section -->
+      <div class="form-section">
+        <div class="section-title"><i class="fas fa-child"></i> Informations de l'enfant</div>
+        <div class="row">
+          <div class="field">
+            <label>Nom <span class="required">*</span></label>
+            <input type="text" id="nom" name="nom" placeholder="Nom de famille" required>
+          </div>
+          <div class="field">
+            <label>Prénom <span class="required">*</span></label>
+            <input type="text" id="prenom" name="prenom" placeholder="Prénom" required>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>Date de naissance <span class="required">*</span></label>
+            <input type="date" id="ddn" name="ddn" required>
+          </div>
+          <div class="field">
+            <label>Sexe <span class="required">*</span></label>
+            <select id="sexe" name="sexe" required>
+              <option value="">-- Sélectionner --</option>
+              <option value="Masculin">Masculin</option>
+              <option value="Féminin">Féminin</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>Classe actuelle</label>
+            <select id="classe" name="classe">
+              <option value="">-- Sélectionner --</option>
+              <option value="CE1">CE1</option><option value="CE2">CE2</option><option value="CM1">CM1</option><option value="CM2">CM2</option>
+              <option value="6ème">6ème</option><option value="5ème">5ème</option><option value="4ème">4ème</option><option value="3ème">3ème</option>
+              <option value="2nde">2nde</option><option value="1ère">1ère</option><option value="Tle">Tle</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Établissement</label>
+            <input type="text" id="ecole" name="ecole" placeholder="Nom de l'école">
+          </div>
+        </div>
+      </div>
+
+      <!-- Parent Section -->
+      <div class="form-section">
+        <div class="section-title"><i class="fas fa-users"></i> Parent / Tuteur</div>
+        <div class="row">
+          <div class="field">
+            <label>Nom complet <span class="required">*</span></label>
+            <input type="text" id="parentNom" name="parentNom" placeholder="Nom et prénom" required>
+          </div>
+          <div class="field">
+            <label>Lien avec l'enfant</label>
+            <select id="lien" name="lien">
+              <option value="">-- Sélectionner --</option>
+              <option value="Père">Père</option><option value="Mère">Mère</option><option value="Tuteur">Tuteur</option><option value="Grand-parent">Grand-parent</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>Téléphone principal <span class="required">*</span></label>
+            <input type="tel" id="tel1" name="tel1" placeholder="+237 6XX XX XX XX" required>
+          </div>
+          <div class="field">
+            <label>Téléphone secondaire</label>
+            <input type="tel" id="tel2" name="tel2" placeholder="+237 6XX XX XX XX">
+          </div>
+        </div>
+        <div class="row">
+          <div class="field full-row">
+            <label>Email</label>
+            <input type="email" id="email" name="email" placeholder="exemple@email.com">
+          </div>
+        </div>
+        <div class="row">
+          <div class="field full-row">
+            <label>Adresse / Quartier</label>
+            <input type="text" id="adresse" name="adresse" placeholder="Quartier, ville">
+          </div>
+        </div>
+      </div>
+
+      <!-- Themes Section -->
+      <div class="form-section">
+        <div class="section-title"><i class="fas fa-laptop-code"></i> Thèmes souhaités</div>
+        <div class="checkbox-group" id="themesGroup">
+          <label class="checkbox-item" data-value="Conception et programmation">
+            <input type="checkbox" value="Conception et programmation"> Conception et programmation
+          </label>
+          <label class="checkbox-item" data-value="Conception des systèmes avec Arduino">
+            <input type="checkbox" value="Conception des systèmes avec Arduino"> Conception des systèmes avec Arduino
+          </label>
+          <label class="checkbox-item" data-value="Électronique de base">
+            <input type="checkbox" value="Électronique de base"> Électronique de base
+          </label>
+        </div>
+      </div>
+
+      <!-- Material Section -->
+      <div class="form-section">
+        <div class="section-title"><i class="fas fa-laptop"></i> Matériel & Informations</div>
+        <div class="row">
+          <div class="field full-row">
+            <label>Ordinateur portable ? <span class="required">*</span></label>
+            <select id="ordi" name="ordi" required>
+              <option value="">-- Choisir --</option>
+              <option value="Oui, l'enfant a son propre ordinateur">Oui, l'enfant a son propre ordinateur</option>
+              <option value="Non, besoin d'un ordinateur">Non, besoin d'un ordinateur</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field full-row">
+            <label>Comment nous avez-vous connu ?</label>
+            <select id="source" name="source">
+              <option value="">-- Sélectionner --</option>
+              <option value="Réseaux sociaux">Réseaux sociaux</option><option value="Bouche à oreille">Bouche à oreille</option>
+              <option value="Flyer">Flyer</option><option value="WhatsApp">WhatsApp</option><option value="Publicité">Publicité</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field full-row">
+            <label>Remarques / Questions</label>
+            <textarea id="notes" name="notes" rows="3" placeholder="Informations complémentaires..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Price -->
+      <div class="price-box">
+        <div class="price-item">
+          <div class="price-label">Frais de formation</div>
+          <div class="price-amount">25 000 <small>XAF</small></div>
+        </div>
+        <div class="price-item">
+          <div class="price-label">Frais d'inscription</div>
+          <div class="price-amount">10 000 <small>XAF</small></div>
+        </div>
+        <div class="offer-badge"><i class="fas fa-gift"></i> Manuel offert</div>
+      </div>
+
+      <button type="submit" class="btn-submit" id="submitBtn">
+        <i class="fab fa-whatsapp"></i> Envoyer sur WhatsApp
+      </button>
+    </form>
+
+    <div class="success-message" id="successMessage">
+      <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+      <h3>Inscription envoyée !</h3>
+      <p>Votre formulaire a été transmis par WhatsApp.<br>Notre équipe vous contactera dans les minutes qui suivent.</p>
+      <button class="btn-submit" style="margin-top: 20px;" onclick="location.reload()">
+        <i class="fas fa-plus"></i> Nouvelle inscription
+      </button>
+    </div>
+  </div>
+
+  <div class="contact-bar">
+    <p><i class="fas fa-headset"></i> Assistance directe</p>
+    <a href="https://wa.me/237658164532" class="whatsapp-link" target="_blank">
+      <i class="fab fa-whatsapp fa-lg"></i> +237 658 16 45 32
+    </a>
+  </div>
+</div>
+
+<script>
+  // Particle generation
+  function createParticles() {
+    const container = document.getElementById('particles');
+    if (!container) return;
+    for (let i = 0; i < 30; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      const size = Math.random() * 80 + 20;
+      particle.style.width = size + 'px';
+      particle.style.height = size + 'px';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.top = Math.random() * 100 + '%';
+      particle.style.animationDelay = Math.random() * 10 + 's';
+      particle.style.animationDuration = Math.random() * 15 + 10 + 's';
+      container.appendChild(particle);
+    }
+  }
+  createParticles();
+
+  // Checkbox styling
+  const checkItems = document.querySelectorAll('.checkbox-item');
+  checkItems.forEach(item => {
+    const checkbox = item.querySelector('input');
+    if (checkbox) {
+      checkbox.addEventListener('change', function() {
+        if (this.checked) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    }
+  });
+
+  // Format date to readable string
+  function formatDate(dateString) {
+    if (!dateString) return 'Non spécifiée';
+    try {
+      const d = new Date(dateString + 'T00:00:00');
+      return d.toLocaleDateString('fr-FR');
+    } catch (e) {
+      return 'Date invalide';
+    }
+  }
+
+  // Calculate age from DOB
+  function calculateAge(dob) {
+    if (!dob) return null;
+    try {
+      const birthDate = new Date(dob + 'T00:00:00');
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
+      return age >= 0 ? age : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // Get selected themes
+  function getSelectedThemes() {
+    const themes = [];
+    document.querySelectorAll('#themesGroup input[type="checkbox"]:checked').forEach(cb => {
+      themes.push(cb.value);
+    });
+    return themes.length > 0 ? themes.join(', ') : 'Aucun thème sélectionné';
+  }
+
+  // Escape special characters for WhatsApp URL
+  function escapeForWhatsApp(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/[*_\[\]()~`>#+-=|{}.!]/g, '\\$&')
+      .trim();
+  }
+
+  // Format WhatsApp message with proper escaping
+  function formatWhatsAppMessage(formData) {
+    const themes = getSelectedThemes();
+    const age = formData.ddn ? calculateAge(formData.ddn) : 'Non calculé';
+    
+    let message = `🏫 *NOUVELLE INSCRIPTION - VACANCES UTILES* 🏫\n\n`;
+    message += `👦 *ENFANT*\n`;
+    message += `▸ Nom: ${escapeForWhatsApp(formData.nom)}\n`;
+    message += `▸ Prénom: ${escapeForWhatsApp(formData.prenom)}\n`;
+    message += `▸ Date naissance: ${formatDate(formData.ddn)}\n`;
+    message += `▸ Âge: ${age} ans\n`;
+    message += `▸ Sexe: ${escapeForWhatsApp(formData.sexe) || 'Non précisé'}\n`;
+    message += `▸ Classe: ${escapeForWhatsApp(formData.classe) || 'Non précisée'}\n`;
+    message += `▸ Établissement: ${escapeForWhatsApp(formData.ecole) || 'Non précisé'}\n\n`;
+    
+    message += `👨‍👩‍👧 *PARENT / TUTEUR*\n`;
+    message += `▸ Nom complet: ${escapeForWhatsApp(formData.parentNom)}\n`;
+    message += `▸ Lien: ${escapeForWhatsApp(formData.lien) || 'Non précisé'}\n`;
+    message += `▸ Téléphone principal: ${escapeForWhatsApp(formData.tel1)}\n`;
+    message += `▸ Téléphone secondaire: ${escapeForWhatsApp(formData.tel2) || 'Aucun'}\n`;
+    message += `▸ Email: ${escapeForWhatsApp(formData.email) || 'Non renseigné'}\n`;
+    message += `▸ Adresse: ${escapeForWhatsApp(formData.adresse) || 'Non précisée'}\n\n`;
+    
+    message += `📚 *FORMATION*\n`;
+    message += `▸ Thèmes: ${themes}\n`;
+    message += `▸ Ordinateur: ${escapeForWhatsApp(formData.ordi) || 'Non précisé'}\n`;
+    message += `▸ Source: ${escapeForWhatsApp(formData.source) || 'Non précisée'}\n`;
+    message += `▸ Notes: ${escapeForWhatsApp(formData.notes) || 'Aucune'}\n\n`;
+    
+    message += `💰 *TARIFS*\n`;
+    message += `▸ Formation: 25 000 XAF\n`;
+    message += `▸ Inscription: 10 000 XAF\n`;
+    message += `▸ Total: 35 000 XAF\n\n`;
+    
+    message += `📅 Début: 22 Juin 2026\n`;
+    message += `📍 Lieu: Douala Ndogbon, Carrefour Biffaga\n\n`;
+    message += `--- Formulaire envoyé depuis le site web ---`;
+    
+    return encodeURIComponent(message);
+  }
+
+  // Validate form - FIXED: Proper handling of select fields
+  function validateForm() {
+    let isValid = true;
+    const requiredFields = ['nom', 'prenom', 'ddn', 'sexe', 'parentNom', 'tel1', 'ordi'];
+    
+    requiredFields.forEach(fieldId => {
+      const field = document.getElementById(fieldId);
+      if (!field) return;
+      
+      const value = field.type === 'text' || field.type === 'email' || field.type === 'tel' ? 
+                    field.value.trim() : field.value;
+      
+      if (!value) {
+        field.classList.add('error-border');
+        isValid = false;
+      } else {
+        field.classList.remove('error-border');
+      }
+    });
+    
+    // Validate phone number (simple check)
+    const tel1 = document.getElementById('tel1');
+    if (tel1 && tel1.value.trim() && tel1.value.trim().replace(/\D/g, '').length < 8) {
+      tel1.classList.add('error-border');
+      isValid = false;
+    }
+    
+    if (!isValid) {
+      alert('Veuillez remplir tous les champs obligatoires (*)');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    return isValid;
+  }
+
+  // Get all form data
+  function getFormData() {
+    return {
+      nom: document.getElementById('nom').value.trim(),
+      prenom: document.getElementById('prenom').value.trim(),
+      ddn: document.getElementById('ddn').value,
+      sexe: document.getElementById('sexe').value,
+      classe: document.getElementById('classe').value,
+      ecole: document.getElementById('ecole').value.trim(),
+      parentNom: document.getElementById('parentNom').value.trim(),
+      lien: document.getElementById('lien').value,
+      tel1: document.getElementById('tel1').value.trim(),
+      tel2: document.getElementById('tel2').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      adresse: document.getElementById('adresse').value.trim(),
+      ordi: document.getElementById('ordi').value,
+      source: document.getElementById('source').value,
+      notes: document.getElementById('notes').value.trim()
+    };
+  }
+
+  // Submit handler - WhatsApp direct - FIXED: Proper state management
+  document.getElementById('registrationForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    if (!validateForm()) return;
+    
+    const submitBtn = document.getElementById('submitBtn');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Envoi en cours...';
+    submitBtn.classList.add('loading');
+    submitBtn.disabled = true;
+    
+    const formData = getFormData();
+    const message = formatWhatsAppMessage(formData);
+    
+    // WhatsApp API - Numéro officiel de l'organisation
+    const phoneNumber = '237658164532';
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+    
+    // Ouvrir WhatsApp dans un nouvel onglet
+    setTimeout(() => {
+      window.open(whatsappUrl, '_blank');
+      
+      // Afficher le message de succès
+      document.getElementById('registrationForm').style.display = 'none';
+      document.getElementById('successMessage').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      
+      // Sauvegarder localement pour traçabilité
+      const allData = { ...formData, dateSoumission: new Date().toISOString() };
+      try {
+        localStorage.setItem('lastInscription', JSON.stringify(allData));
+      } catch (e) {
+        console.log('localStorage non disponible');
+      }
+      
+      // Réinitialiser le bouton
+      submitBtn.innerHTML = originalText;
+      submitBtn.classList.remove('loading');
+      submitBtn.disabled = false;
+    }, 300);
+  });
+  
+  // Auto-remove error border on input - FIXED: Works with select and change event
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    el.addEventListener('input', function() {
+      this.classList.remove('error-border');
+    });
+    el.addEventListener('change', function() {
+      this.classList.remove('error-border');
+    });
+  });
+  
+  // Age validation hint
+  document.getElementById('ddn').addEventListener('change', function() {
+    const age = calculateAge(this.value);
+    if (age !== null && (age < 8 || age > 15)) {
+      alert('Attention: L\'âge recommandé pour cette formation est entre 8 et 15 ans.');
+    }
+  });
+</script>
+</body>
+</html>
