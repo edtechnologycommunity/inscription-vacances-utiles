@@ -508,8 +508,8 @@
             <label>Sexe <span class="required">*</span></label>
             <select id="sexe" name="sexe" required>
               <option value="">-- Sélectionner --</option>
-              <option>Masculin</option>
-              <option>Féminin</option>
+              <option value="Masculin">Masculin</option>
+              <option value="Féminin">Féminin</option>
             </select>
           </div>
         </div>
@@ -518,9 +518,9 @@
             <label>Classe actuelle</label>
             <select id="classe" name="classe">
               <option value="">-- Sélectionner --</option>
-              <option>CE1</option><option>CE2</option><option>CM1</option><option>CM2</option>
-              <option>6ème</option><option>5ème</option><option>4ème</option><option>3ème</option>
-              <option>2nde</option><option>1ère</option><option>Tle</option>
+              <option value="CE1">CE1</option><option value="CE2">CE2</option><option value="CM1">CM1</option><option value="CM2">CM2</option>
+              <option value="6ème">6ème</option><option value="5ème">5ème</option><option value="4ème">4ème</option><option value="3ème">3ème</option>
+              <option value="2nde">2nde</option><option value="1ère">1ère</option><option value="Tle">Tle</option>
             </select>
           </div>
           <div class="field">
@@ -542,7 +542,7 @@
             <label>Lien avec l'enfant</label>
             <select id="lien" name="lien">
               <option value="">-- Sélectionner --</option>
-              <option>Père</option><option>Mère</option><option>Tuteur</option><option>Grand-parent</option>
+              <option value="Père">Père</option><option value="Mère">Mère</option><option value="Tuteur">Tuteur</option><option value="Grand-parent">Grand-parent</option>
             </select>
           </div>
         </div>
@@ -604,8 +604,8 @@
             <label>Comment nous avez-vous connu ?</label>
             <select id="source" name="source">
               <option value="">-- Sélectionner --</option>
-              <option>Réseaux sociaux</option><option>Bouche à oreille</option>
-              <option>Flyer</option><option>WhatsApp</option><option>Publicité</option>
+              <option value="Réseaux sociaux">Réseaux sociaux</option><option value="Bouche à oreille">Bouche à oreille</option>
+              <option value="Flyer">Flyer</option><option value="WhatsApp">WhatsApp</option><option value="Publicité">Publicité</option>
             </select>
           </div>
         </div>
@@ -657,6 +657,7 @@
   // Particle generation
   function createParticles() {
     const container = document.getElementById('particles');
+    if (!container) return;
     for (let i = 0; i < 30; i++) {
       const particle = document.createElement('div');
       particle.classList.add('particle');
@@ -676,31 +677,41 @@
   const checkItems = document.querySelectorAll('.checkbox-item');
   checkItems.forEach(item => {
     const checkbox = item.querySelector('input');
-    checkbox.addEventListener('change', function() {
-      if (this.checked) {
-        item.classList.add('active');
-      } else {
-        item.classList.remove('active');
-      }
-    });
+    if (checkbox) {
+      checkbox.addEventListener('change', function() {
+        if (this.checked) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    }
   });
 
   // Format date to readable string
   function formatDate(dateString) {
     if (!dateString) return 'Non spécifiée';
-    const d = new Date(dateString);
-    return d.toLocaleDateString('fr-FR');
+    try {
+      const d = new Date(dateString + 'T00:00:00');
+      return d.toLocaleDateString('fr-FR');
+    } catch (e) {
+      return 'Date invalide';
+    }
   }
 
   // Calculate age from DOB
   function calculateAge(dob) {
     if (!dob) return null;
-    const birthDate = new Date(dob);
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
-    return age;
+    try {
+      const birthDate = new Date(dob + 'T00:00:00');
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
+      return age >= 0 ? age : null;
+    } catch (e) {
+      return null;
+    }
   }
 
   // Get selected themes
@@ -712,34 +723,42 @@
     return themes.length > 0 ? themes.join(', ') : 'Aucun thème sélectionné';
   }
 
-  // Format WhatsApp message
+  // Escape special characters for WhatsApp URL
+  function escapeForWhatsApp(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/[*_\[\]()~`>#+-=|{}.!]/g, '\\$&')
+      .trim();
+  }
+
+  // Format WhatsApp message with proper escaping
   function formatWhatsAppMessage(formData) {
     const themes = getSelectedThemes();
     const age = formData.ddn ? calculateAge(formData.ddn) : 'Non calculé';
     
     let message = `🏫 *NOUVELLE INSCRIPTION - VACANCES UTILES* 🏫\n\n`;
     message += `👦 *ENFANT*\n`;
-    message += `▸ Nom: ${formData.nom}\n`;
-    message += `▸ Prénom: ${formData.prenom}\n`;
+    message += `▸ Nom: ${escapeForWhatsApp(formData.nom)}\n`;
+    message += `▸ Prénom: ${escapeForWhatsApp(formData.prenom)}\n`;
     message += `▸ Date naissance: ${formatDate(formData.ddn)}\n`;
     message += `▸ Âge: ${age} ans\n`;
-    message += `▸ Sexe: ${formData.sexe || 'Non précisé'}\n`;
-    message += `▸ Classe: ${formData.classe || 'Non précisée'}\n`;
-    message += `▸ Établissement: ${formData.ecole || 'Non précisé'}\n\n`;
+    message += `▸ Sexe: ${escapeForWhatsApp(formData.sexe) || 'Non précisé'}\n`;
+    message += `▸ Classe: ${escapeForWhatsApp(formData.classe) || 'Non précisée'}\n`;
+    message += `▸ Établissement: ${escapeForWhatsApp(formData.ecole) || 'Non précisé'}\n\n`;
     
     message += `👨‍👩‍👧 *PARENT / TUTEUR*\n`;
-    message += `▸ Nom complet: ${formData.parentNom}\n`;
-    message += `▸ Lien: ${formData.lien || 'Non précisé'}\n`;
-    message += `▸ Téléphone principal: ${formData.tel1}\n`;
-    message += `▸ Téléphone secondaire: ${formData.tel2 || 'Aucun'}\n`;
-    message += `▸ Email: ${formData.email || 'Non renseigné'}\n`;
-    message += `▸ Adresse: ${formData.adresse || 'Non précisée'}\n\n`;
+    message += `▸ Nom complet: ${escapeForWhatsApp(formData.parentNom)}\n`;
+    message += `▸ Lien: ${escapeForWhatsApp(formData.lien) || 'Non précisé'}\n`;
+    message += `▸ Téléphone principal: ${escapeForWhatsApp(formData.tel1)}\n`;
+    message += `▸ Téléphone secondaire: ${escapeForWhatsApp(formData.tel2) || 'Aucun'}\n`;
+    message += `▸ Email: ${escapeForWhatsApp(formData.email) || 'Non renseigné'}\n`;
+    message += `▸ Adresse: ${escapeForWhatsApp(formData.adresse) || 'Non précisée'}\n\n`;
     
     message += `📚 *FORMATION*\n`;
     message += `▸ Thèmes: ${themes}\n`;
-    message += `▸ Ordinateur: ${formData.ordi || 'Non précisé'}\n`;
-    message += `▸ Source: ${formData.source || 'Non précisée'}\n`;
-    message += `▸ Notes: ${formData.notes || 'Aucune'}\n\n`;
+    message += `▸ Ordinateur: ${escapeForWhatsApp(formData.ordi) || 'Non précisé'}\n`;
+    message += `▸ Source: ${escapeForWhatsApp(formData.source) || 'Non précisée'}\n`;
+    message += `▸ Notes: ${escapeForWhatsApp(formData.notes) || 'Aucune'}\n\n`;
     
     message += `💰 *TARIFS*\n`;
     message += `▸ Formation: 25 000 XAF\n`;
@@ -753,14 +772,19 @@
     return encodeURIComponent(message);
   }
 
-  // Validate form
+  // Validate form - FIXED: Proper handling of select fields
   function validateForm() {
     let isValid = true;
     const requiredFields = ['nom', 'prenom', 'ddn', 'sexe', 'parentNom', 'tel1', 'ordi'];
     
     requiredFields.forEach(fieldId => {
       const field = document.getElementById(fieldId);
-      if (!field.value.trim()) {
+      if (!field) return;
+      
+      const value = field.type === 'text' || field.type === 'email' || field.type === 'tel' ? 
+                    field.value.trim() : field.value;
+      
+      if (!value) {
         field.classList.add('error-border');
         isValid = false;
       } else {
@@ -769,9 +793,9 @@
     });
     
     // Validate phone number (simple check)
-    const tel1 = document.getElementById('tel1').value.trim();
-    if (tel1 && tel1.length < 8) {
-      document.getElementById('tel1').classList.add('error-border');
+    const tel1 = document.getElementById('tel1');
+    if (tel1 && tel1.value.trim() && tel1.value.trim().replace(/\D/g, '').length < 8) {
+      tel1.classList.add('error-border');
       isValid = false;
     }
     
@@ -791,7 +815,7 @@
       ddn: document.getElementById('ddn').value,
       sexe: document.getElementById('sexe').value,
       classe: document.getElementById('classe').value,
-      ecole: document.getElementById('ecole').value,
+      ecole: document.getElementById('ecole').value.trim(),
       parentNom: document.getElementById('parentNom').value.trim(),
       lien: document.getElementById('lien').value,
       tel1: document.getElementById('tel1').value.trim(),
@@ -804,8 +828,8 @@
     };
   }
 
-  // Submit handler - WhatsApp direct
-  document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+  // Submit handler - WhatsApp direct - FIXED: Proper state management
+  document.getElementById('registrationForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
     if (!validateForm()) return;
@@ -820,36 +844,44 @@
     const message = formatWhatsAppMessage(formData);
     
     // WhatsApp API - Numéro officiel de l'organisation
-    const phoneNumber = '237658164532'; // Numéro WhatsApp pour recevoir les inscriptions
+    const phoneNumber = '237658164532';
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
     
     // Ouvrir WhatsApp dans un nouvel onglet
     setTimeout(() => {
       window.open(whatsappUrl, '_blank');
+      
+      // Afficher le message de succès
+      document.getElementById('registrationForm').style.display = 'none';
+      document.getElementById('successMessage').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      
+      // Sauvegarder localement pour traçabilité
+      const allData = { ...formData, dateSoumission: new Date().toISOString() };
+      try {
+        localStorage.setItem('lastInscription', JSON.stringify(allData));
+      } catch (e) {
+        console.log('localStorage non disponible');
+      }
+      
+      // Réinitialiser le bouton
+      submitBtn.innerHTML = originalText;
+      submitBtn.classList.remove('loading');
+      submitBtn.disabled = false;
     }, 300);
-    
-    // Afficher succès
-    document.getElementById('registrationForm').style.display = 'none';
-    document.getElementById('successMessage').style.display = 'block';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    
-    // Optionnel: sauvegarder localement pour traçabilité
-    const allData = { ...formData, dateSoumission: new Date().toISOString() };
-    localStorage.setItem('lastInscription', JSON.stringify(allData));
-    
-    submitBtn.innerHTML = originalText;
-    submitBtn.classList.remove('loading');
-    submitBtn.disabled = false;
   });
   
-  // Auto-remove error border on input
-  document.querySelectorAll('input, select').forEach(el => {
+  // Auto-remove error border on input - FIXED: Works with select and change event
+  document.querySelectorAll('input, select, textarea').forEach(el => {
     el.addEventListener('input', function() {
+      this.classList.remove('error-border');
+    });
+    el.addEventListener('change', function() {
       this.classList.remove('error-border');
     });
   });
   
-  // Age validation hint (optionnel)
+  // Age validation hint
   document.getElementById('ddn').addEventListener('change', function() {
     const age = calculateAge(this.value);
     if (age !== null && (age < 8 || age > 15)) {
@@ -858,3 +890,4 @@
   });
 </script>
 </body>
+</html>
